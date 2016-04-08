@@ -1,8 +1,12 @@
-var app = require('http').createServer(handler);
-var io = require('socket.io')(app);
+var express = require('express');
+var path = require('path');
+var app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 var fs = require('fs');
 
-app.listen(80);
+app.use(express.static(path.join(__dirname, 'public')));
+http.listen(3000, "127.0.0.1");
 
 function handler(req, res) {
     fs.readFile(__dirname + '/index.html',
@@ -23,6 +27,7 @@ io.on('connection', function(socket) {
     });
 
     socket.on('chat message', function(msg) {
+        console.log('message: ' + msg);
         io.emit('chat message', msg);
     });
 
