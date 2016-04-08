@@ -1,0 +1,50 @@
+<html>
+
+<head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+        $(document).ready(function() {
+            var socket = io('http://localhost');
+
+            $('#editArea').keyup(function() {
+                console.log($('#editArea').val());
+                socket.emit('areaMsg', $('#editArea').val());
+            });
+
+            socket.on('news', function(data) {
+                console.log(data);
+                socket.emit('my other event', 'data');
+            });
+
+            $('form').submit(function() {
+                socket.emit('chat message', $('#m').val());
+                $('#m').val('');
+                return false;
+            });
+
+            socket.on('chat message', function(msg) {
+                $('#messages').append($('<li>').text(msg));
+            });
+
+        });
+    </script>
+</head>
+
+<body>
+    <div id="codeArea" style="display: inline-block;">
+        <textarea id='editArea' rows="40" cols="100" style="resize: none;"></textarea>
+    </div>
+
+    <div id="rightSide" style="float: right;">
+        <ul id="messages" style="list-style-type: none;"></ul>
+
+        <form action="">
+            <input id="m" autocomplete="off" />
+            <button type="submit">Send</button>
+        </form>
+
+    </div>
+</body>
+
+</html>
