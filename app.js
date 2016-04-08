@@ -6,7 +6,10 @@ var io = require('socket.io')(http);
 var fs = require('fs');
 
 app.use(express.static(path.join(__dirname, 'public')));
-http.listen(3000, "127.0.0.1");
+
+http.listen(3000, function(){
+  console.log('listening on *:3000');
+});
 
 function handler(req, res) {
     fs.readFile(__dirname + '/index.html',
